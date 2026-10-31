@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10243a"><title>RailChart Alert</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#142235;background:#f3f6fa}*{box-sizing:border-box}body{margin:0}.top{background:#10243a;color:#fff;padding:24px 18px 30px}.wrap{max-width:900px;margin:auto}.brand{font-size:12px;letter-spacing:.14em;color:#b8d2ea;font-weight:700}h1{font-size:27px;margin:8px 0 5px}.sub{color:#d4e0eb;font-size:14px}main{max-width:900px;margin:-14px auto 40px;padding:0 14px}.panel{background:#fff;border:1px solid #e0e7ef;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 5px 18px #13263a0b}h2{font-size:17px;margin:0 0 14px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{display:block;font-size:12px;font-weight:700;color:#526174;margin-bottom:6px}input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font:inherit;background:white;color:#142235}input:focus,select:focus{outline:2px solid #9bc5ec;border-color:#3985c9}button{border:0;border-radius:10px;padding:12px 16px;background:#1264a3;color:#fff;font-weight:700;font-size:14px;cursor:pointer}.secondary{background:#eaf1f7;color:#17344e}.danger{background:#fff0ef;color:#a3322b;padding:8px 10px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.hint{font-size:12px;color:#65758a;line-height:1.5;margin:10px 0 0}.route{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;background:#f1f6fb;padding:12px;border-radius:12px;margin-bottom:14px}.station{font-weight:800}.code{font-size:11px;color:#5b6b7d}.arrow{color:#64829c;font-size:20px;text-align:center}.cards{display:grid;gap:10px}.train{border:1px solid #e0e7ef;border-radius:12px;padding:13px}.trainhead{display:flex;justify-content:space-between;gap:10px;align-items:center}.trainname{font-weight:800}.pill{font-size:11px;font-weight:700;border-radius:30px;padding:5px 9px;background:#fff4d9;color:#855600}.meta{font-size:12px;color:#627287;margin-top:8px}.empty{color:#718096;font-size:13px;padding:12px 0}.notice{background:#fff8e8;border:1px solid #f0dfb4;border-radius:12px;padding:12px;font-size:12px;color:#6f5315;line-height:1.55}.small{font-size:11px;color:#718096;margin-top:5px}.station-preview{margin-top:12px;border-radius:10px;background:#f7f9fc;padding:12px;font-size:13px;line-height:1.7}footer{text-align:center;color:#7b8796;font-size:11px;padding:10px}@media(max-width:560px){.grid{grid-template-columns:1fr}h1{font-size:24px}}
+</style></head>
+<body><header class="top"><div class="wrap"><div class="brand">TRAIN JOURNEY COMPANION</div><h1>RailChart Alert</h1><div class="sub">ट्रेन के पूरे रूट में से अपना From और To स्टेशन चुनें</div></div></header>
+<main>
+<section class="panel"><h2>ट्रेन की जानकारी</h2>
+<div class="grid">
+<div><label for="trainNo">Train number</label><input id="trainNo" inputmode="numeric" maxlength="5" placeholder="जैसे 12301"></div>
+<div><label for="journeyDate">Journey date</label><input id="journeyDate" type="date"></div>
+</div>
+<div class="actions"><button id="loadRoute" type="button">Load train route</button></div>
+<p class="hint">ट्रेन नंबर डालकर Load train route दबाएँ। ट्रेन का स्टेशन क्रम मिलने पर From और To की सूची उसी क्रम में खुलेगी।</p>
+<div id="routeState" class="small" aria-live="polite">अभी कोई ट्रेन रूट लोड नहीं हुआ है।</div>
+</section>
+<section class="panel"><h2>अपना यात्रा सेक्शन चुनें</h2>
+<div class="grid">
+<div><label for="from">From station</label><select id="from" disabled><option>पहले ट्रेन रूट लोड करें</option></select></div>
+<div><label for="to">To station</label><select id="to" disabled><option>पहले ट्रेन रूट लोड करें</option></select></div>
+</div>
+<div id="routePreview" class="station-preview" hidden></div>
+<div class="actions"><button id="addTrain" type="button" disabled>+ Add to monitoring list</button></div>
+<p class="hint">From स्टेशन, To स्टेशन से पहले होना चाहिए। आप ट्रेन के किसी भी दो उपयुक्त स्टेशनों के बीच का सेक्शन चुन सकेंगे।</p>
+</section>
+<section class="panel"><h2>मॉनिटरिंग लिस्ट</h2><div id="trains" class="cards"><div class="empty">अभी कोई ट्रेन नहीं जोड़ी गई है।</div></div></section>
+<section class="panel"><div class="notice"><b>महत्वपूर्ण — यह UI prototype है:</b> इस संस्करण में ट्रेन रूट का लाइव डेटा API से नहीं आता। फिलहाल 12301 के लिए केवल इंटरफेस जाँचने वाला उदाहरण रूट उपलब्ध है। वास्तविक उपयोग से पहले विश्वसनीय ट्रेन-शेड्यूल डेटा स्रोत जोड़ना होगा। अभी चार्ट की लाइव जाँच, बैकग्राउंड मॉनिटरिंग या Push Notification चालू नहीं है।</div></section>
+<footer>RailChart Alert • Prototype v0.2</footer></main>
+<script>
+const demoRoutes={
+ "12301":[["HWH","Howrah Jn"],["BWN","Barddhaman Jn"],["DGR","Durgapur"],["ASN","Asansol Jn"],["DHN","Dhanbad Jn"],["KTH","Koderma"],["GAYA","Gaya Jn"],["DOS","Dehri On Sone"],["SSM","Sasaram"],["DDU","Pt. Deen Dayal Upadhyaya Jn"],["PRYJ","Prayagraj Jn"],["CNB","Kanpur Central"],["NDLS","New Delhi"]]
+};
+let route=[], saved=[];try{saved=JSON.parse(localStorage.getItem("rca-v2")||"[]")}catch(e){}
+const $=id=>document.getElementById(id), from=$("from"),to=$("to");
+function updateTo(){const idx=from.selectedIndex;to.innerHTML="";route.slice(idx+1).forEach((s,i)=>{const o=document.createElement("option");o.value=String(idx+1+i);o.textContent=s[1]+" ("+s[0]+")";to.append(o)});preview()}
+function preview(){if(!route.length||from.selectedIndex<0||to.selectedIndex<0){$("routePreview").hidden=true;return}const a=route[from.selectedIndex],b=route[Number(to.value)];$("routePreview").hidden=false;$("routePreview").textContent="चुना गया सेक्शन: "+a[1]+" ("+a[0]+") → "+b[1]+" ("+b[0]+")"}
+$("loadRoute").onclick=()=>{const n=$("trainNo").value.trim();route=demoRoutes[n]||[];if(!route.length){$("routeState").textContent="इस डेमो में इस ट्रेन का रूट उपलब्ध नहीं है। वास्तविक API जुड़ने पर ट्रेन नंबर से स्टेशन सूची आएगी।";from.disabled=to.disabled=$("addTrain").disabled=true;$("routePreview").hidden=true;return}
+ $("routeState").textContent="Demo route loaded: "+route.length+" stations. यह उदाहरण डेटा है, लाइव शेड्यूल से सत्यापित नहीं।";from.innerHTML="";route.slice(0,-1).forEach((s,i)=>{let o=document.createElement("option");o.value=i;o.textContent=s[1]+" ("+s[0]+")";from.append(o)});from.disabled=false;from.selectedIndex=0;updateTo();to.disabled=false;$("addTrain").disabled=false};
+from.onchange=updateTo;to.onchange=preview;
+function render(){const box=$("trains");box.innerHTML="";if(!saved.length){box.innerHTML='<div class="empty">अभी कोई ट्रेन नहीं जोड़ी गई है।</div>';return}saved.forEach((t,i)=>{let card=document.createElement("div");card.className="train";let h=document.createElement("div");h.className="trainhead";let name=document.createElement("div");name.className="trainname";name.textContent=t.n+" • "+t.a+" → "+t.b;let p=document.createElement("span");p.className="pill";p.textContent="Demo — Not checked";h.append(name,p);let m=document.createElement("div");m.className="meta";m.textContent="Journey date: "+t.d;let r=document.createElement("div");r.className="trainhead";r.style.marginTop="10px";r.append(m);let del=document.createElement("button");del.className="danger";del.textContent="Remove";del.onclick=()=>{saved.splice(i,1);localStorage.setItem("rca-v2",JSON.stringify(saved));render()};r.append(del);card.append(h,r);box.append(card)})}
+$("addTrain").onclick=()=>{const a=route[from.selectedIndex],b=route[Number(to.value)];if(!a||!b)return;if(Number(to.value)<=from.selectedIndex){alert("To स्टेशन, From के बाद होना चाहिए।");return}saved.push({n:$("trainNo").value.trim(),d:$("journeyDate").value,a:a[1]+" ("+a[0]+")",b:b[1]+" ("+b[0]+")"});localStorage.setItem("rca-v2",JSON.stringify(saved));render()};
+render();
+</script></body></html>
